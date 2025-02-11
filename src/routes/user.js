@@ -11,13 +11,13 @@ userRouter.get("/user", userAuth, (req, res) => {
 
 userRouter.post("/user/signup", async (req, res) => {
   try {
-    const { firstName, email, password, phoneNum } = req.body;
+    const { firstName, email, password, phoneNum , gender } = req.body;
 
-    if (!firstName || !email || !password || !phoneNum) {
+    if (!firstName || !email || !password || !phoneNum || !gender) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const user = new User({ firstName, email, password, phoneNum });
+    const user = new User({ firstName, email, password, phoneNum , gender });
 
     await user.save(); // Ensure we await the save operation
 
@@ -43,7 +43,6 @@ userRouter.post("/user/login", async (req, res) => {
     }
     
     const token = await loggedInUser.getJWT();
-    // res.cookie('AuthToken',token,{expires: new Date(Date.now() + 900000),httpOnly: true});
 
     res.cookie('AuthToken',token,{expires: new Date(Date.now() + 900000),httpOnly: true});
     res.status(200).json({ message: "Login successful!!!", token });
